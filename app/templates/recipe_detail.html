@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="detail-header">
+    <div>
+        <h1>{{ recipe.title }}</h1>
+        <div class="recipe-meta" style="margin-bottom: 0;">
+            <span>📅 建立於 {{ recipe.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            {% if recipe.category %}
+            <span style="margin-left: 10px; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; padding: 2px 8px; border-radius: 12px;">
+                {{ recipe.category.name }}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('recipe.edit_recipe', id=recipe.id) }}" class="btn-secondary">✏️ 編輯</a>
+        <form action="{{ url_for('recipe.delete_recipe', id=recipe.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('確定要刪除這份食譜嗎？此動作無法復原。');">
+            <button type="submit" class="btn-danger">🗑️ 刪除</button>
+        </form>
+    </div>
+</div>
+
+<div class="detail-content">
+    <div class="content-section">
+        <h2>🛒 準備材料</h2>
+        <div class="content-text">{{ recipe.ingredients }}</div>
+    </div>
+    <div class="content-section">
+        <h2>🍳 製作作法</h2>
+        <div class="content-text">{{ recipe.steps }}</div>
+    </div>
+</div>
+{% endblock %}

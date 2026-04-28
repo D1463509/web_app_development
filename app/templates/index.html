@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <h1>探索你的專屬食譜</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">紀錄每一個美味瞬間，隨時尋找料理靈感</p>
+    
+    <form class="search-form" action="{{ url_for('main.index') }}" method="GET">
+        <input type="text" name="q" class="search-input" placeholder="搜尋食譜標題..." value="{{ search_query }}">
+        <button type="submit" class="btn-primary">搜尋</button>
+    </form>
+</section>
+
+{% if recipes %}
+<div class="recipe-grid">
+    {% for recipe in recipes %}
+    <a href="{{ url_for('recipe.recipe_detail', id=recipe.id) }}" class="recipe-card">
+        <h3 class="recipe-title">{{ recipe.title }}</h3>
+        <div class="recipe-meta">
+            <span>📅 {{ recipe.created_at.strftime('%Y-%m-%d') }}</span>
+            {% if recipe.category %}
+            <span style="margin-left: 10px; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">
+                {{ recipe.category.name }}
+            </span>
+            {% endif %}
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1;">
+            {{ recipe.ingredients[:50] }}{{ '...' if recipe.ingredients|length > 50 else '' }}
+        </p>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div style="text-align: center; color: var(--text-secondary); padding: 4rem 0;">
+    <h3>目前還沒有符合的食譜。</h3>
+    <p>點擊右上角新增你的第一道食譜吧！</p>
+</div>
+{% endif %}
+{% endblock %}
